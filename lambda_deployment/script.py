@@ -36,28 +36,41 @@ def GetComments():
 			#####  See if we can find out what Season/Episode From the String  #####
 			#####  Returns False, [True, seasion, episode], or ["episode name", season, episode]  #####
 			episode_info = findEpisode(searchTerm)
-			if not episode_info == False:
+			if not episode_info == False and not episode_info == None:
 				if episode_info[0] == True:
 					#####  We looked, but there wasn't that episode in the CSV  #####
 					reply = "[Sorry](https://vignette.wikia.nocookie.net/spongefan/images/3/3c/Squidward_the_Loser_%3AP.jpg/revision/latest?cb=20130120163943), It doesn't look like theres a Season " + str(episode_info[1]) + " Episode " + str(episode_info[2]) + ", try an episode name."
 				else:
 					#####  Let's split the episodes into their respective segments  #####
+					print(episode_info)
 					episodes = episode_info[0].split("/")
+					print(episodes)
 
 					#####  It's not a special, so theres more than 1 episode  #####
 					if len(episodes) > 1:
+						if not episode_info[3] == None:
+							segment = episode_info[3]
+						else:
+							segment = 0
 
-						##### Return the Episode Names with their respective URLS  #####
-						reply = "Here's What I found on for " + searchTerm + ": \n\n ------------------------------------ \n\n"
-						d = dict(enumerate(string.ascii_lowercase, 1))
-						i = 1
-						for episode in episodes:
-							episode_url = wikia.page("Spongebob", wikia.search("Spongebob", episode)[0]).url
-							reply +=  "Season " + str(episode_info[1]) + " Episode " + str(episode_info[2]) + d[i] + ": [" + episode + "](" + urllib.parse.quote(episode_url).replace("%3A", ":") + ") \n\n"
-							i = i + 1
+						print("Found Segment: " + str(segment))
+						if not segment == 0:
+							episode = episodes[segment - 1]
+							print("Extracted Episode Name: " + episode)
+							searchTerm = episode
+						else:
+							##### Return the Episode Names with their respective URLS  #####
+							reply = "Here's What I found on for " + searchTerm + ": \n\n ------------------------------------ \n\n"
+							d = dict(enumerate(string.ascii_lowercase, 1))
+							i = 1
+							for episode in episodes:
+								episode_url = wikia.page("Spongebob", wikia.search("Spongebob", episode)[0]).url
+								reply +=  "Season " + str(episode_info[1]) + " Episode " + str(episode_info[2]) + d[i] + ": [" + episode + "](" + urllib.parse.quote(episode_url).replace("%3A", ":") + ") \n\n"
+								i = i + 1
 
 					else:
 						#####  If there's only one, than we can just search that name  #####
+						print(episodes)
 						searchTerm = episodes[0]
 						print("Found Episode: " + searchTerm)
 
@@ -184,6 +197,7 @@ def findEpisode(query):
 		#####  Defaults  #####
 		episode = -1
 		season = -1
+		segment = 0
 
 		##### Let's see if we can find our keywords  #####
 		if episodeFinder[2] in episode_words or episodeFinder[0] in episode_words:
@@ -200,10 +214,21 @@ def findEpisode(query):
 				else:
 					##### Found it, next index should be the integer  #####
 					episode_index = episode_index + 1
-					episode = int(episodeFinder[episode_index])
+					if "a" in episodeFinder[episode_index].lower() or "b" in episodeFinder[episode_index].lower() or "c" in episodeFinder[episode_index].lower(): 
+						pass
+					episode = int(episodeFinder[episode_index].lower().replace("a", "").replace("b", "").replace("c",""))
+					if "a" in episodeFinder[episode_index].lower():
+						segment = 1
+					elif "b" in episodeFinder[episode_index].lower():
+						segment = 2
+					elif "c" in episodeFinder[episode_index].lower():
+						segment = 3
+					else:
+						segment = 0
+				
 
 			print(episode)
-		
+			print(segment)
 		if episodeFinder[2] in season_words or episodeFinder[0] in season_words:
 			#####  Found the Season  #####
 			print("Found Season")
@@ -228,6 +253,7 @@ def findEpisode(query):
 		else:
 			#####  Come on baby, what's the name!  #####
 			episode_name = getEpisodeName(season, episode)
+			print(episode_name)
 			if episode_name == False:
 				#####  We got Nothing  #####
 				return False
@@ -236,7 +262,10 @@ def findEpisode(query):
 				return [True, season, episode]
 			else:
 				#####  We got it!  #####
-				return episode_name
+				if segment == 0:
+					return [episode_name, season, episode, None]
+				else:
+					return [episode_name, season, episode, segment]
 
 
 def getEpisodeName(season, episode):
@@ -256,10 +285,10 @@ def getEpisodeName(season, episode):
 			episode_name
 		except UnboundLocalError:
 			#####  No, we didn't  #####
-			return True
+			return [True, season, episode]
 		else:
 			#####  Yep, we did!  #####
-			return [episode_name, season, episode]
+			return episode_name
 
 def fetchComments():
 	global db
