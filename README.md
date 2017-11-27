@@ -15,7 +15,7 @@ To get an episode by episode number, you have to comment in one of the following
 
 # Requirements
 - Python 3.6 AWS Lambda Instance
-- MySQL Database (hosted on AWS MySQL RDS)
+- MySQL Database (hosted on AWS MySQL RDS) - **MUST BE ACCESSIBLE TO LAMBDA **
 - praw (*pip3 install praw*)
 - pymysql (*pip3 install pymysql*)
 - wikia (*pip3 install wikia*)
@@ -25,5 +25,9 @@ To get an episode by episode number, you have to comment in one of the following
 - **Timeout:** 2 minutes and 30 seconds
 - **Runtime:** Python 3.6
 - **Handler:** script.lambda_function
+
+# Changes to make before uploading:
+- **Add your Database info on likes 296-298 in script.py**
+- **Update your Client ID, Secret, Username and Password in praw.ini**
 
 Created by Pizzaface for the /r/Spongebob community.
