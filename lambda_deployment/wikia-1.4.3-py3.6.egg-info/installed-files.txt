@@ -1,0 +1,13 @@
+..\wikia\exceptions.py
+..\wikia\util.py
+..\wikia\wikia.py
+..\wikia\__init__.py
+..\wikia\__pycache__\exceptions.cpython-36.pyc
+..\wikia\__pycache__\util.cpython-36.pyc
+..\wikia\__pycache__\wikia.cpython-36.pyc
+..\wikia\__pycache__\__init__.cpython-36.pyc
+dependency_links.txt
+PKG-INFO
+requires.txt
+SOURCES.txt
+top_level.txt
