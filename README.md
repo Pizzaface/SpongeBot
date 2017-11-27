@@ -20,4 +20,10 @@ To get an episode by episode number, you have to comment in one of the following
 - pymysql (*pip3 install pymysql*)
 - wikia (*pip3 install wikia*)
 
+# Lambda Function Options:
+- **Trigger:** 3 minute Cloudwatch Event
+- **Timeout:** 2 minutes and 30 seconds
+- **Runtime:** Python 3.6
+- **Handler:** script.lambda_function
+
 Created by Pizzaface for the /r/Spongebob community.
