@@ -11,7 +11,13 @@ A reddit bot used to give information from the Spongebob Wikia
 ## Episodes By Episode Number
 To get an episode by episode number, you have to comment in one of the following forms:
 - !spongebot (Season or Series) [Season Number] Episode [Episode Number]
-- !spongebot (SE or S)[Season Number] (E or EP)[Episode Number] *Note the lack of spaces*
+
+**!spongebot Season 3 Episode 2b**
+
+- !spongebot (SE or S)[Season Number] (E or EP)[Episode Number][a-c for segement selection] *Note the lack of spaces*
+
+**!spongebot S3 EP2**
+
 
 # Requirements
 - Python 3.6 AWS Lambda Instance
